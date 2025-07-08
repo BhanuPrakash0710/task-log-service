@@ -24,6 +24,12 @@ func Register(c *gin.Context) {
 		//UserId:   utils.GenerateUserId(input.Name),
 	}
 
+	// Validate email format
+	if !utils.IsValidEmail(user.Email) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email format"})
+		return
+	}
+
 	if err := models.CreateUser(&user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 		return
